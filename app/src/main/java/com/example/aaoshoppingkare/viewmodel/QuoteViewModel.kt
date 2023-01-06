@@ -1,22 +1,39 @@
 package com.example.aaoshoppingkare.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.aaoshoppingkare.model.QuoteList
 import com.example.aaoshoppingkare.repository.QuoteRepository
+import com.example.aaoshoppingkare.view.UiState
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import com.example.aaoshoppingkare.model.Result
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
 class QuoteViewModel(private val repository: QuoteRepository) : ViewModel() {
 
-    val quotes : LiveData<QuoteList>
-    get() = repository.quoteData
+    val quotes = MutableLiveData<UiState<List<Result>>>()
 
-    init {
-      viewModelScope.launch {
+    val errorQuote: LiveData<String>
+        get() = repository.error
 
-          repository.getQuotes(1)
-      }
+    fun getQuotes(page: Int) {
+
+        viewModelScope.launch {
+            try {
+                repository.getQuotes(page).map { it ->
+                    UiState.Success(it) as UiState<List<Result>>
+                }
+                    .onStart {
+                        emit(UiState.Loading)
+                    }
+                    .onEach { uiState ->
+                        quotes.value = uiState
+                    }.launchIn(viewModelScope)
+            } catch (e: Exception) {
+                quotes.value = UiState.Error(e.message!!, e)
+            }
+        }
     }
 }
