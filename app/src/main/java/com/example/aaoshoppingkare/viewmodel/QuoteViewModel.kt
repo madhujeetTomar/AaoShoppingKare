@@ -1,6 +1,8 @@
 package com.example.aaoshoppingkare.viewmodel
 
 import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.aaoshoppingkare.model.QuoteList
 import com.example.aaoshoppingkare.repository.QuoteRepository
 import com.example.aaoshoppingkare.view.UiState
@@ -13,17 +15,20 @@ import kotlinx.coroutines.flow.onStart
 
 class QuoteViewModel(private val repository: QuoteRepository) : ViewModel() {
 
-    val quotes = MutableLiveData<UiState<List<Result>>>()
+    val quotes = MutableLiveData<UiState<PagingData<Result>>>()
+
+    val quoteList = repository.getQuotesThroughPagingUsingLiveData().cachedIn(viewModelScope)
 
     val errorQuote: LiveData<String>
         get() = repository.error
 
-    fun getQuotes(page: Int) {
+
+    fun getQuotes() {
 
         viewModelScope.launch {
             try {
-                repository.getQuotes(page).map { it ->
-                    UiState.Success(it) as UiState<List<Result>>
+                repository.getQuotesThroughPagingUsingFlow().map { it ->
+                    UiState.Success(it) as UiState<PagingData<Result>>
                 }
                     .onStart {
                         emit(UiState.Loading)

@@ -8,6 +8,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aaoshoppingkare.adapter.QuoteAdapter
@@ -30,13 +31,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setUp()
-        viewModel.getQuotes(1)
+       // viewModel.getQuotes(1)
+        /**Using Livedata and PagingData*/
+      /*  viewModel.quoteList.observe(this, Observer {
+            recyclerView.visibility = View.VISIBLE
+            quoteAdapter.submitData(lifecycle,it)
+            recyclerView.adapter = quoteAdapter
+            progressBar.visibility=View.GONE
+        })*/
+        /**Using Flow and UIState*/
+        viewModel.getQuotes()
         viewModel.quotes.observe(this) { it ->
             it?.let {   render(it)}
-            viewModel.errorQuote.observe(this) { error ->
-                progressBar.visibility= View.GONE
-                Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
-            }
+
+        }
+        viewModel.errorQuote.observe(this) { error ->
+            progressBar.visibility= View.GONE
+            Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -51,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun render(uiState: UiState<List<com.example.aaoshoppingkare.model.Result>>) {
+    private fun render(uiState: UiState<PagingData<com.example.aaoshoppingkare.model.Result>>) {
         when (uiState) {
             is UiState.Loading -> {
                 progressBar.visibility = View.VISIBLE
@@ -59,7 +70,8 @@ class MainActivity : AppCompatActivity() {
             }
             is UiState.Success -> {
                recyclerView.visibility = View.VISIBLE
-                quoteAdapter.submitList(uiState.value)
+                quoteAdapter.submitData(lifecycle,uiState.value)
+
                 recyclerView.adapter = quoteAdapter
               progressBar.visibility=View.GONE
             }

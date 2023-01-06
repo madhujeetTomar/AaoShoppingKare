@@ -22,7 +22,7 @@
             android:layout_margin="5dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-condensed-medium"
-            android:maxLines="3"
+            android:maxLines="5"
             android:textStyle="bold|italic"
             android:textColor="#BDA4A4"
             android:text="mdhfdghqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqwwwwwwwwwwwwww eeeeeeeeeeeeeeeeeeeeefdjkxbhcbfkjgfdsksdhdugdgsfahidsugywsdu8wujdlkwadkuhdi"

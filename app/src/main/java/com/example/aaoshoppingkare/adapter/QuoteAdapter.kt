@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aaoshoppingkare.R
 import com.example.aaoshoppingkare.model.Result
 
-class QuoteAdapter : ListAdapter<Result, QuoteAdapter.QuotesViewHolder>(QuotesDiffUtils()) {
+class QuoteAdapter : PagingDataAdapter<Result, QuoteAdapter.QuotesViewHolder>(QuotesDiffUtils()) {
 
     class QuotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -32,7 +33,7 @@ class QuoteAdapter : ListAdapter<Result, QuoteAdapter.QuotesViewHolder>(QuotesDi
             oldItem: Result,
             newItem: Result
         ): Boolean {
-            return oldItem == newItem
+            return oldItem._id == newItem._id
         }
 
         override fun areContentsTheSame(
@@ -53,6 +54,6 @@ class QuoteAdapter : ListAdapter<Result, QuoteAdapter.QuotesViewHolder>(QuotesDi
 
     override fun onBindViewHolder(holder: QuotesViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item!!)
     }
 }
