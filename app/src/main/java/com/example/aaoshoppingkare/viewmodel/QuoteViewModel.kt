@@ -7,11 +7,16 @@ import com.example.aaoshoppingkare.view.UiState
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import com.example.aaoshoppingkare.model.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import javax.inject.Inject
 
-class QuoteViewModel(private val repository: QuoteRepository) : ViewModel() {
+@HiltViewModel
+class QuoteViewModel @Inject constructor(val repository: QuoteRepository): ViewModel() {
+
 
     val quotes = MutableLiveData<UiState<List<Result>>>()
 

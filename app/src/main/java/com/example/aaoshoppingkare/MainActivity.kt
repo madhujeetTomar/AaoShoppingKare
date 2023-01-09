@@ -14,15 +14,17 @@ import com.example.aaoshoppingkare.adapter.QuoteAdapter
 import com.example.aaoshoppingkare.view.UiState
 import com.example.aaoshoppingkare.viewmodel.QuoteViewModel
 import com.example.aaoshoppingkare.viewmodel.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import androidx.activity.viewModels
 
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var viewModelProvider: ViewModelFactory
     lateinit var quoteAdapter: QuoteAdapter
 
-    private lateinit var viewModel: QuoteViewModel
+     val viewModel: QuoteViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar : ProgressBar
 
@@ -47,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         quoteAdapter = QuoteAdapter()
         (application as ShopApp).appComponent.inject(this)
-        viewModel = ViewModelProvider(this, viewModelProvider)[QuoteViewModel::class.java]
     }
 
 
