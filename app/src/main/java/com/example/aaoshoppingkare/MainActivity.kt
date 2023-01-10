@@ -8,6 +8,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aaoshoppingkare.adapter.QuoteAdapter
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelProvider: ViewModelFactory
     lateinit var quoteAdapter: QuoteAdapter
+
+
 
     private lateinit var viewModel: QuoteViewModel
     private lateinit var recyclerView: RecyclerView

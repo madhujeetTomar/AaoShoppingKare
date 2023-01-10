@@ -14,7 +14,7 @@ class NetworkModule {
     @Provides
     fun provideRetrofit() : Retrofit
     {
-     return Retrofit.Builder().baseUrl("https://quotable.io/").addConverterFactory(GsonConverterFactory.create()).build()
+     return Retrofit.Builder().baseUrl("https://fakestoreapi.com").addConverterFactory(GsonConverterFactory.create()).build()
     }
 
     @Singleton
